@@ -9,11 +9,13 @@ public class PlayerCtrl : MonoBehaviour
     [Header("Movement")]
     [SerializeField] private float moveSpeed = 5f;
     [SerializeField] private float jumpForce = 60f;
+    private float jumpStamina = 5f;
     [SerializeField] private Vector2 curMoveInput;
     [SerializeField] private LayerMask groundLayer;
 
     [Header("Look")]
     [SerializeField] private Transform camContainer;
+    [SerializeField] private GameObject Crosshair;
     [SerializeField] private float mouseSensitivity;
     [SerializeField] private Vector2 curLookInput;
     [SerializeField] private float minXRot = -80f;
@@ -21,11 +23,15 @@ public class PlayerCtrl : MonoBehaviour
     [SerializeField] private float curXRot;
     [SerializeField] private float curYRot;
     [SerializeField] private bool TPSOn = false;
+    [SerializeField] private Vector3 TPSPos;
 
 
-    public Rigidbody _rigidbody;
+    private Rigidbody _rigidbody;
     private PlayerAnimCtrl _playerAnimCtrl;
-    private PlayerInteract playerInteract;
+    private PlayerInteract _playerInteract;
+    private PlayerCondition _playerCondition;
+
+    [SerializeField] private GameObject InventoryUI;
     private Camera cam;
 
     private void Awake()
@@ -44,10 +50,17 @@ public class PlayerCtrl : MonoBehaviour
             return;
         }
 
-        playerInteract = GetComponent<PlayerInteract>();
-        if (playerInteract == null)
+        _playerInteract = GetComponent<PlayerInteract>();
+        if (_playerInteract == null)
         {
             Debug.LogError("PlayerInteract component not found on this GameObject.");
+            return;
+        }
+
+        _playerCondition = GetComponent<PlayerCondition>();
+        if (_playerCondition == null)
+        {
+            Debug.LogError("PlayerCondition component not found on this GameObject.");
             return;
         }
 
@@ -62,7 +75,10 @@ public class PlayerCtrl : MonoBehaviour
 
     private void LateUpdate()
     {
-        Look();
+        if (!InventoryUI.activeSelf)
+        {
+            Look();
+        }
     }
 
     private void Move()
@@ -87,9 +103,10 @@ public class PlayerCtrl : MonoBehaviour
 
     public void onJumpInput(InputAction.CallbackContext context)
     {
-        if (context.phase == InputActionPhase.Started && IsGrounded())
+        if (context.phase == InputActionPhase.Started && IsGrounded() && _playerCondition.Stamina >= jumpStamina)
         {
             _rigidbody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+            _playerCondition.Stamina -= jumpStamina;
         }
     }
 
@@ -129,15 +146,22 @@ public class PlayerCtrl : MonoBehaviour
         curLookInput = context.ReadValue<Vector2>();
     }
 
+    public void OnInventoryInput(InputAction.CallbackContext context)
+    {
+        InventoryUI.SetActive(!InventoryUI.activeSelf);
+        Crosshair.SetActive(!InventoryUI.activeSelf);
+        Cursor.lockState = InventoryUI.activeSelf ? CursorLockMode.None : CursorLockMode.Locked;
+    }
+
     public void OnInteractInput(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Started)
         {
-            if (playerInteract.curInteractObject == null)
+            if (_playerInteract.curInteractObject == null)
             {
                 return;
             }
-            Destroy(playerInteract.curInteractObject);
+            Destroy(_playerInteract.curInteractObject);
         }
     }
 
@@ -155,12 +179,12 @@ public class PlayerCtrl : MonoBehaviour
         switch (_TPSOn)
         {
             case true:
-                cam.transform.localPosition = new Vector3(0.8f, 0f, -3f);
-                playerInteract.maxCheckDistance = 6f;
+                cam.transform.localPosition = TPSPos;
+                _playerInteract.maxCheckDistance = 6f;
                 break;
             case false:
-                cam.transform.localPosition = new Vector3(0f, 0f, 0f);
-                playerInteract.maxCheckDistance = 3f;
+                cam.transform.localPosition = Vector3.zero;
+                _playerInteract.maxCheckDistance = 3f;
                 break;
         }
     }

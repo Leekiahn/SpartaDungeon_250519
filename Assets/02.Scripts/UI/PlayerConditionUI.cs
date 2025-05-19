@@ -9,6 +9,9 @@ public class PlayerConditionUI : MonoBehaviour
     [SerializeField] private Image hpCircle;
     [SerializeField] private TextMeshProUGUI hpText;
 
+    [SerializeField] private Image staminaCircle;
+    [SerializeField] private TextMeshProUGUI staminaText;
+
     [SerializeField] private PlayerCondition playerCondition;
 
     void Awake()
@@ -32,7 +35,10 @@ public class PlayerConditionUI : MonoBehaviour
 
     void UpdateHpUI()
     {
-        hpCircle.fillAmount = playerCondition.hp / playerCondition.maxHp;
-        hpText.text = playerCondition.hp.ToString("0");
+        hpCircle.fillAmount = playerCondition.Hp / playerCondition.maxHp;
+        hpText.text = playerCondition.Hp.ToString("0");
+
+        staminaCircle.fillAmount = playerCondition.Stamina / playerCondition.maxStamina;
+        staminaText.text = playerCondition.Stamina.ToString("0");
     }
 }
