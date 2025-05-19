@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerCondition : MonoBehaviour
 {
-    [SerializeField] public float maxHp = 100f;
+    public float maxHp = 100f;
     [SerializeField] private float hp;
     public float Hp
     {
@@ -20,8 +20,8 @@ public class PlayerCondition : MonoBehaviour
     }
 
 
-    [SerializeField] public float maxStamina = 100f;
-    [SerializeField] public float stamina;
+    public float maxStamina = 100f;
+    [SerializeField] private float stamina;
     public float Stamina
     {
         get { return stamina; }
@@ -35,19 +35,32 @@ public class PlayerCondition : MonoBehaviour
         }
     }
 
+    public float minSleep = 0f;
+    public float maxSleep = 100f;
+    [SerializeField] private float sleep;
+    public float Sleep
+    {
+        get { return sleep; }
+        set
+        {
+            sleep = Mathf.Clamp(value, minSleep, maxSleep);
+            if (sleep >= 80)
+            {
+                Debug.Log("Player is too tired!");
+            }
+        }
+    }
+
     void Awake()
     {
         Hp = maxHp;
         Stamina = maxStamina;
-    }
-
-    void Start()
-    {
-
+        Sleep = minSleep;
     }
 
     void Update()
     {
         Stamina += 1f * Time.deltaTime;
+        Sleep += 0.5f * Time.deltaTime;
     }
 }

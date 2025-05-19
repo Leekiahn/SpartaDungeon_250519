@@ -12,6 +12,9 @@ public class PlayerConditionUI : MonoBehaviour
     [SerializeField] private Image staminaCircle;
     [SerializeField] private TextMeshProUGUI staminaText;
 
+    [SerializeField] private Image sleepCircle;
+    [SerializeField] private TextMeshProUGUI sleepText;
+
     [SerializeField] private PlayerCondition playerCondition;
 
     void Awake()
@@ -40,5 +43,8 @@ public class PlayerConditionUI : MonoBehaviour
 
         staminaCircle.fillAmount = playerCondition.Stamina / playerCondition.maxStamina;
         staminaText.text = playerCondition.Stamina.ToString("0");
+
+        sleepCircle.fillAmount = playerCondition.Sleep / playerCondition.maxSleep;
+        sleepText.text = playerCondition.Sleep.ToString("0");
     }
 }
