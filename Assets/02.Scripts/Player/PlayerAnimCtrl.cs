@@ -35,9 +35,6 @@ public class PlayerAnimCtrl : MonoBehaviour
             case PlayerState.Walk:
                 _animator.SetBool("IsMove", true);
                 break;
-            case PlayerState.Jump:
-                // Handle jump animation
-                break;
         }
     }
 }

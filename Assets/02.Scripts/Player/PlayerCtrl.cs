@@ -19,10 +19,14 @@ public class PlayerCtrl : MonoBehaviour
     [SerializeField] private float minXRot = -80f;
     [SerializeField] private float maxXRot = 80f;
     [SerializeField] private float curXRot;
+    [SerializeField] private float curYRot;
+    [SerializeField] private bool TPSOn = false;
 
 
-    private Rigidbody _rigidbody;
+    public Rigidbody _rigidbody;
     private PlayerAnimCtrl _playerAnimCtrl;
+    private PlayerInteract playerInteract;
+    private Camera cam;
 
     private void Awake()
     {
@@ -40,6 +44,14 @@ public class PlayerCtrl : MonoBehaviour
             return;
         }
 
+        playerInteract = GetComponent<PlayerInteract>();
+        if (playerInteract == null)
+        {
+            Debug.LogError("PlayerInteract component not found on this GameObject.");
+            return;
+        }
+
+        cam = Camera.main;
         Cursor.lockState = CursorLockMode.Locked;
     }
 
@@ -56,10 +68,7 @@ public class PlayerCtrl : MonoBehaviour
     private void Move()
     {
         Vector3 dir = transform.forward * curMoveInput.y + transform.right * curMoveInput.x;
-        dir *= moveSpeed;
-        dir.y = _rigidbody.velocity.y;
-
-        _rigidbody.velocity = dir;
+        _rigidbody.MovePosition(_rigidbody.position + dir * moveSpeed * Time.fixedDeltaTime);
     }
 
     public void onMoveInput(InputAction.CallbackContext context)
@@ -81,7 +90,6 @@ public class PlayerCtrl : MonoBehaviour
         if (context.phase == InputActionPhase.Started && IsGrounded())
         {
             _rigidbody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-            _playerAnimCtrl.playerState = PlayerState.Jump;
         }
     }
 
@@ -112,7 +120,8 @@ public class PlayerCtrl : MonoBehaviour
         curXRot = Mathf.Clamp(curXRot, minXRot, maxXRot);
         camContainer.localEulerAngles = new Vector3(-curXRot, 0f, 0f);
 
-        transform.localEulerAngles += new Vector3(0f, curLookInput.x * mouseSensitivity, 0f);
+        curYRot += curLookInput.x * mouseSensitivity;
+        transform.localEulerAngles = new Vector3(0f, curYRot, 0f);
     }
 
     public void OnLookInput(InputAction.CallbackContext context)
@@ -120,5 +129,39 @@ public class PlayerCtrl : MonoBehaviour
         curLookInput = context.ReadValue<Vector2>();
     }
 
+    public void OnInteractInput(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Started)
+        {
+            if (playerInteract.curInteractObject == null)
+            {
+                return;
+            }
+            Destroy(playerInteract.curInteractObject);
+        }
+    }
 
+    public void OnViewToggleInput(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Started)
+        {
+            TPSOn = !TPSOn;
+            ViewToggle(TPSOn);
+        }
+    }
+
+    private void ViewToggle(bool _TPSOn)
+    {
+        switch (_TPSOn)
+        {
+            case true:
+                cam.transform.localPosition = new Vector3(0.8f, 0f, -3f);
+                playerInteract.maxCheckDistance = 6f;
+                break;
+            case false:
+                cam.transform.localPosition = new Vector3(0f, 0f, 0f);
+                playerInteract.maxCheckDistance = 3f;
+                break;
+        }
+    }
 }
