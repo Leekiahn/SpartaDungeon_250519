@@ -26,17 +26,7 @@ public class PlayerConditionUI : MonoBehaviour
         }
     }
 
-    void Start()
-    {
-        
-    }
-
-    void Update()
-    {
-        UpdateHpUI();
-    }
-
-    void UpdateHpUI()
+    public void UpdateUI()
     {
         hpCircle.fillAmount = playerCondition.Hp / playerCondition.maxHp;
         hpText.text = playerCondition.Hp.ToString("0");

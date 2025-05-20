@@ -15,7 +15,7 @@ MonoBehaviour:
   displayName: "\uB3C4\uB07C"
   description: "\uC774\uC0C1\uD558\uAC8C\uB3C4 \uC7A5\uCC29\uD558\uBA74 \uC18D\uB3C4\uAC00
     \uC99D\uAC00\uD55C\uB2E4"
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: ecdbdda5541e00f43aaf0de1a6ac4cc9, type: 3}
   itemType: 0
   dropPrefab: {fileID: 3688916871849653590, guid: 5243058f5b383e44c902354b0452251f, type: 3}
   consumables: []

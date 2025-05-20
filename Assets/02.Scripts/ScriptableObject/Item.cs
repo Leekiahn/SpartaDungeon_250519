@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ItemObject : MonoBehaviour
+public class Item : MonoBehaviour
 {
-    [SerializeField] private ItemData itemData;
+    [SerializeField] public ItemData itemData;
 
     public string GetInteractPrompt()
     {

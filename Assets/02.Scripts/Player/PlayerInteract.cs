@@ -4,14 +4,13 @@ using UnityEngine;
 
 public class PlayerInteract : MonoBehaviour
 {
-    public GameObject curInteractObject;
-    public ItemObject curInteractItemObject;
+    public GameObject curObject;
+    public Item item;
     [SerializeField] private LayerMask InteractableLayerMask;
     public float maxCheckDistance = 3f;
 
     [SerializeField] private Camera cam;
 
-    [SerializeField] private InteractPromptUI promptUI;
     private void Awake()
     {
         cam = Camera.main;
@@ -23,15 +22,15 @@ public class PlayerInteract : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit, maxCheckDistance, InteractableLayerMask))
         {
-            curInteractObject = hit.collider.gameObject;
-            curInteractItemObject = curInteractObject.GetComponent<ItemObject>();
-            promptUI.itemText.text = curInteractItemObject.GetInteractPrompt();
+            curObject = hit.collider.gameObject;
+            item = curObject.GetComponent<Item>();
+            UIManager.Instance.interactPromptUI.itemText.text = item.GetInteractPrompt();
         }
         else
         {
-            curInteractObject = null;
-            curInteractItemObject = null;
-            promptUI.itemText.text = string.Empty;
+            curObject = null;
+            item = null;
+            UIManager.Instance.interactPromptUI.itemText.text = string.Empty;
         }
     }
 }

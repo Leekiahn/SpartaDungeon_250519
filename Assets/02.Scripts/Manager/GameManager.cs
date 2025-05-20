@@ -14,13 +14,15 @@ public class GameManager : Singleton<GameManager>
 
     private void Start()
     {
+        //플레이어가 스폰될 위치를 저장
         spawnPos = player.transform.position;
     }
 
 
     private void Update()
     {
-        if(player.transform.position.y < -30f)
+        //플레이어 포지션 y가 -30보다 작으면 스폰 위치로 이동
+        if (player.transform.position.y < -30f)
         {
             player.transform.position = spawnPos;
         }

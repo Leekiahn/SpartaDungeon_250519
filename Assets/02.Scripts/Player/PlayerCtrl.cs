@@ -7,32 +7,27 @@ using UnityEngine.Playables;
 public class PlayerCtrl : MonoBehaviour
 {
     [Header("Movement")]
-    [SerializeField] private float moveSpeed = 5f;
-    [SerializeField] private float jumpForce = 60f;
+    public float moveSpeed = 5f;
+    public float jumpForce = 60f;
     private float jumpStamina = 5f;
-    [SerializeField] private Vector2 curMoveInput;
+    private Vector2 curMoveInput;
     [SerializeField] private LayerMask groundLayer;
 
     [Header("Look")]
     [SerializeField] private Transform camContainer;
-    [SerializeField] private GameObject Crosshair;
     [SerializeField] private float mouseSensitivity;
-    [SerializeField] private Vector2 curLookInput;
+    private Vector2 curLookInput;
     [SerializeField] private float minXRot = -80f;
     [SerializeField] private float maxXRot = 80f;
-    [SerializeField] private float curXRot;
-    [SerializeField] private float curYRot;
-    [SerializeField] private bool TPSOn = false;
+    private float curXRot;
+    private float curYRot;
+    private bool TPSOn = false;
     [SerializeField] private Vector3 TPSPos;
 
 
     private Rigidbody _rigidbody;
-    private PlayerAnimCtrl _playerAnimCtrl;
-    private PlayerInteract _playerInteract;
-    private PlayerCondition _playerCondition;
-
-    [SerializeField] private GameObject InventoryUI;
     private Camera cam;
+    public Transform dropPos;
 
     private void Awake()
     {
@@ -40,27 +35,6 @@ public class PlayerCtrl : MonoBehaviour
         if (_rigidbody == null)
         {
             Debug.LogError("Rigidbody component not found on this GameObject.");
-            return;
-        }
-
-        _playerAnimCtrl = GetComponent<PlayerAnimCtrl>();
-        if (_playerAnimCtrl == null)
-        {
-            Debug.LogError("PlayerAnimCtrl component not found on this GameObject.");
-            return;
-        }
-
-        _playerInteract = GetComponent<PlayerInteract>();
-        if (_playerInteract == null)
-        {
-            Debug.LogError("PlayerInteract component not found on this GameObject.");
-            return;
-        }
-
-        _playerCondition = GetComponent<PlayerCondition>();
-        if (_playerCondition == null)
-        {
-            Debug.LogError("PlayerCondition component not found on this GameObject.");
             return;
         }
 
@@ -75,41 +49,46 @@ public class PlayerCtrl : MonoBehaviour
 
     private void LateUpdate()
     {
-        if (!InventoryUI.activeSelf)
+        //인벤토리가 꺼져 있을 때만 카메라 회전
+        if (!UIManager.Instance.invenUI.gameObject.activeSelf)
         {
             Look();
         }
     }
 
+    //이동
     private void Move()
     {
         Vector3 dir = transform.forward * curMoveInput.y + transform.right * curMoveInput.x;
         _rigidbody.MovePosition(_rigidbody.position + dir * moveSpeed * Time.fixedDeltaTime);
     }
 
+    //이동 입력
     public void onMoveInput(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Performed)
         {
             curMoveInput = context.ReadValue<Vector2>();
-            _playerAnimCtrl.playerState = PlayerState.Walk;
+            CharacterManager.Instance.anim.playerState = PlayerState.Walk;
         }
         else if (context.canceled)
         {
             curMoveInput = Vector2.zero;
-            _playerAnimCtrl.playerState = PlayerState.Idle;
+            CharacterManager.Instance.anim.playerState = PlayerState.Idle;
         }
     }
 
+    //점프 입력
     public void onJumpInput(InputAction.CallbackContext context)
     {
-        if (context.phase == InputActionPhase.Started && IsGrounded() && _playerCondition.Stamina >= jumpStamina)
+        if (context.phase == InputActionPhase.Started && IsGrounded() && CharacterManager.Instance.condition.Stamina >= jumpStamina)
         {
             _rigidbody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-            _playerCondition.Stamina -= jumpStamina;
+            CharacterManager.Instance.condition.Stamina -= jumpStamina;
         }
     }
 
+    //지면 확인
     private bool IsGrounded()
     {
         Ray[] ray = new Ray[4]
@@ -131,6 +110,7 @@ public class PlayerCtrl : MonoBehaviour
         return false;
     }
 
+    //카메라 회전
     private void Look()
     {
         curXRot += curLookInput.y * mouseSensitivity;
@@ -141,30 +121,36 @@ public class PlayerCtrl : MonoBehaviour
         transform.localEulerAngles = new Vector3(0f, curYRot, 0f);
     }
 
+    //카메라 회전 입력
     public void OnLookInput(InputAction.CallbackContext context)
     {
         curLookInput = context.ReadValue<Vector2>();
     }
 
+    //인벤토리 오브젝트 활성화 토글
     public void OnInventoryInput(InputAction.CallbackContext context)
     {
-        InventoryUI.SetActive(!InventoryUI.activeSelf);
-        Crosshair.SetActive(!InventoryUI.activeSelf);
-        Cursor.lockState = InventoryUI.activeSelf ? CursorLockMode.None : CursorLockMode.Locked;
+        UIManager.Instance.invenUI.gameObject.SetActive(!UIManager.Instance.invenUI.gameObject.activeSelf);
+        UIManager.Instance.crosshair.SetActive(!UIManager.Instance.invenUI.gameObject.gameObject.activeSelf);
+        Cursor.lockState = UIManager.Instance.invenUI.gameObject.activeSelf ? CursorLockMode.None : CursorLockMode.Locked; //인벤토리가 켜지면 크로스헤어 끔
     }
 
+    //아아템 상호작용 입력
     public void OnInteractInput(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Started)
         {
-            if (_playerInteract.curInteractObject == null)
+            if (CharacterManager.Instance.interact.curObject == null)
             {
                 return;
             }
-            Destroy(_playerInteract.curInteractObject);
+
+            //인벤토리로 아이템 보내기
+            CharacterManager.Instance.inven.AddItem(CharacterManager.Instance.interact.item);
         }
     }
 
+    //시점 토글 전환
     public void OnViewToggleInput(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Started)
@@ -174,17 +160,18 @@ public class PlayerCtrl : MonoBehaviour
         }
     }
 
+    //시점 카메라 전환
     private void ViewToggle(bool _TPSOn)
     {
         switch (_TPSOn)
         {
             case true:
                 cam.transform.localPosition = TPSPos;
-                _playerInteract.maxCheckDistance = 6f;
+                CharacterManager.Instance.interact.maxCheckDistance = 6f;
                 break;
             case false:
                 cam.transform.localPosition = Vector3.zero;
-                _playerInteract.maxCheckDistance = 3f;
+                CharacterManager.Instance.interact.maxCheckDistance = 3f;
                 break;
         }
     }

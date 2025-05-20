@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   displayName: "\uB77C\uB514\uC624"
   description: "\uB354\uBE14 \uC810\uD504 \uB2A5\uB825\uC774 \uC0DD\uAE34\uB2E4"
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 5817cbbd3e961574db44f01496ade59b, type: 3}
   itemType: 0
   dropPrefab: {fileID: 6806299397237480778, guid: 787df2b7e5eb28042bafab6384628374, type: 3}
   consumables: []

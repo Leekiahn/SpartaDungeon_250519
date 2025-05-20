@@ -62,5 +62,6 @@ public class PlayerCondition : MonoBehaviour
     {
         Stamina += 1f * Time.deltaTime;
         Sleep += 0.5f * Time.deltaTime;
+        UIManager.Instance.playerConditionUI.UpdateUI();
     }
 }
