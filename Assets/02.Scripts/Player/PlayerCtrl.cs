@@ -9,7 +9,7 @@ public class PlayerCtrl : MonoBehaviour
     [Header("Movement")]
     public float moveSpeed = 5f;
     public float jumpForce = 60f;
-    public float climbForce = 200f;
+    public float climbForce = 20f;
     private float jumpStamina = 5f;
     public bool doubleJumpOn;
     private int jumpCount;
@@ -28,7 +28,6 @@ public class PlayerCtrl : MonoBehaviour
     private float curYRot;
     private bool TPSOn = false;
     [SerializeField] private Vector3 TPSPos;
-
 
     private Rigidbody _rigidbody;
     public Camera FPS_cam;
@@ -65,10 +64,6 @@ public class PlayerCtrl : MonoBehaviour
     private void Move()
     {
         Vector3 dir = transform.forward * curMoveInput.y + transform.right * curMoveInput.x;
-        if (IsWallInFront())
-        {
-            dir += transform.up * climbForce;
-        }
         _rigidbody.MovePosition(_rigidbody.position + dir * moveSpeed * Time.fixedDeltaTime);
     }
 
@@ -97,7 +92,7 @@ public class PlayerCtrl : MonoBehaviour
             CharacterManager.Instance.condition.Stamina -= jumpStamina;
         }
 
-        if(doubleJumpOn && jumpCount < maxJumpCount && !IsGrounded() && context.phase == InputActionPhase.Started)
+        if (doubleJumpOn && jumpCount < maxJumpCount && !IsGrounded() && context.phase == InputActionPhase.Started)
         {
             _rigidbody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             jumpCount++;
@@ -193,20 +188,25 @@ public class PlayerCtrl : MonoBehaviour
         }
     }
 
-    //벽에 부딪히는지 확인
-    private bool IsWallInFront()
-    {
-        Ray ray = new Ray(transform.position + (Vector3.up * 1f), transform.forward);
-        Debug.DrawRay(ray.origin, ray.direction, Color.red);
+    ////벽에 부딪히는지 확인
+    //private bool isWallInFront()
+    //{
+    //    Ray[] ray = new Ray[3]
+    //    {
+    //        new Ray(transform.position + (transform.forward * 0.2f) + (Vector3.up * 1.7f), transform.forward),
+    //        new Ray(transform.position + (transform.forward * 0.2f) + (Vector3.up * 1.0f), transform.forward),
+    //        new Ray(transform.position + (transform.forward * 0.2f) + (Vector3.up * 0.01f), transform.forward),
+    //    };
 
-        if (Physics.Raycast(ray, 0.2f, wallLayer))
-        {
-            Debug.Log("Wall detected in front of the player.");
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
+    //    for (int i = 0; i < ray.Length; i++)
+    //    {
+    //        Debug.DrawRay(ray[i].origin, ray[i].direction * 0.2f, Color.red, 0.1f);
+    //        if (Physics.Raycast(ray[i], 0.2f, wallLayer))
+    //        {
+    //            return true;
+    //        }
+    //    }
+
+    //    return false;
+    //}
 }

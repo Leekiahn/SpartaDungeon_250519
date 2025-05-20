@@ -21,12 +21,4 @@ public class JumpPad : MonoBehaviour
             }
         }
     }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            curJumpPlayer = null;
-        }
-    }
 }

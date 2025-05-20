@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
+
 public class ItemSlot : MonoBehaviour
 {
     public Button itemSlot;
@@ -10,6 +11,9 @@ public class ItemSlot : MonoBehaviour
     public Button useButton;
     public Button dropButton;
     public Button equipButton;
+    public Button unequipButton;
+
+    bool isEquipped = false;
 
 
     public void SetItem(ItemData data)
@@ -22,10 +26,12 @@ public class ItemSlot : MonoBehaviour
 
         useButton.onClick.AddListener(() => UseItem());
         dropButton.onClick.AddListener(() => DropItem());
-        //equipButton.onClick.AddListener(() => EquipItem());
+        equipButton.onClick.AddListener(() => EquipItem());
+        unequipButton.onClick.AddListener(() => DropItem());
 
         useButton.gameObject.SetActive(data.itemType == eItemType.consumable);
-        equipButton.gameObject.SetActive(data.itemType == eItemType.equipable);
+        equipButton.gameObject.SetActive(data.itemType == eItemType.equipable && !isEquipped);
+        unequipButton.gameObject.SetActive(data.itemType == eItemType.equipable && isEquipped);
     }
 
     public void OnClick()
@@ -55,10 +61,18 @@ public class ItemSlot : MonoBehaviour
         Destroy(gameObject);
     }
 
-    //public void EquipItem()
-    //{
-    //    Debug.Log("Equipped: " + itemData.itemName);
-    //    EquipmentManager.Instance.Equip(itemData);
-    //    // 인벤토리에서 제거하지 않아도 됨 (장착 UI에서만 관리 가능)
-    //}
+    public void EquipItem()
+    {
+        isEquipped = true;
+        Debug.Log("Equipped: " + itemData.name);
+        //equip 클래스에 아이템 보내기
+    }
+
+    public void UnequipItem()
+    {
+        Debug.Log("Unequipped: " + itemData.name);
+        //equip 클래스에 아이템 삭제하기
+    }
+
+
 }

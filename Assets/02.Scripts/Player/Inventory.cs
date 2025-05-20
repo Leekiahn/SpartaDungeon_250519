@@ -7,6 +7,8 @@ public class Inventory : MonoBehaviour
     public List<ItemData> items;
     public ItemData selectedItem;
 
+    public Transform EquipPos;
+
     void Start()
     {
 
@@ -35,7 +37,6 @@ public class Inventory : MonoBehaviour
         }
     }
 
-    //******************
     public void RemoveItem(ItemData data)
     {
         if (items.Contains(data))

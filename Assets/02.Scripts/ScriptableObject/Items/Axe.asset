@@ -21,4 +21,4 @@ MonoBehaviour:
     type: 0
     value: 0
     duration: 0
-  equipPrefab: {fileID: 0}
+  equipPrefab: {fileID: 1067105051557393406, guid: 036cc9c553a2bf642aaa27ab289a11f6, type: 3}
