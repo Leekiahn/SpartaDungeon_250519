@@ -9,9 +9,14 @@ public class PlayerCtrl : MonoBehaviour
     [Header("Movement")]
     public float moveSpeed = 5f;
     public float jumpForce = 60f;
+    public float climbForce = 200f;
     private float jumpStamina = 5f;
+    public bool doubleJumpOn;
+    private int jumpCount;
+    private int maxJumpCount = 1;
     private Vector2 curMoveInput;
     [SerializeField] private LayerMask groundLayer;
+    [SerializeField] private LayerMask wallLayer;
 
     [Header("Look")]
     [SerializeField] private Transform camContainer;
@@ -26,7 +31,8 @@ public class PlayerCtrl : MonoBehaviour
 
 
     private Rigidbody _rigidbody;
-    private Camera cam;
+    public Camera FPS_cam;
+    public Camera TPS_cam;
     public Transform dropPos;
 
     private void Awake()
@@ -38,7 +44,6 @@ public class PlayerCtrl : MonoBehaviour
             return;
         }
 
-        cam = Camera.main;
         Cursor.lockState = CursorLockMode.Locked;
     }
 
@@ -60,6 +65,10 @@ public class PlayerCtrl : MonoBehaviour
     private void Move()
     {
         Vector3 dir = transform.forward * curMoveInput.y + transform.right * curMoveInput.x;
+        if (IsWallInFront())
+        {
+            dir += transform.up * climbForce;
+        }
         _rigidbody.MovePosition(_rigidbody.position + dir * moveSpeed * Time.fixedDeltaTime);
     }
 
@@ -81,10 +90,17 @@ public class PlayerCtrl : MonoBehaviour
     //점프 입력
     public void onJumpInput(InputAction.CallbackContext context)
     {
+        //일반 점프
         if (context.phase == InputActionPhase.Started && IsGrounded() && CharacterManager.Instance.condition.Stamina >= jumpStamina)
         {
             _rigidbody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             CharacterManager.Instance.condition.Stamina -= jumpStamina;
+        }
+
+        if(doubleJumpOn && jumpCount < maxJumpCount && !IsGrounded() && context.phase == InputActionPhase.Started)
+        {
+            _rigidbody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+            jumpCount++;
         }
     }
 
@@ -103,6 +119,7 @@ public class PlayerCtrl : MonoBehaviour
         {
             if (Physics.Raycast(ray[i], 0.2f, groundLayer))
             {
+                jumpCount = 0;
                 return true;
             }
         }
@@ -166,13 +183,30 @@ public class PlayerCtrl : MonoBehaviour
         switch (_TPSOn)
         {
             case true:
-                cam.transform.localPosition = TPSPos;
-                CharacterManager.Instance.interact.maxCheckDistance = 6f;
+                TPS_cam.gameObject.SetActive(true);
+                CharacterManager.Instance.interact.maxCheckDistance = 7f;
                 break;
             case false:
-                cam.transform.localPosition = Vector3.zero;
+                TPS_cam.gameObject.SetActive(false);
                 CharacterManager.Instance.interact.maxCheckDistance = 3f;
                 break;
+        }
+    }
+
+    //벽에 부딪히는지 확인
+    private bool IsWallInFront()
+    {
+        Ray ray = new Ray(transform.position + (Vector3.up * 1f), transform.forward);
+        Debug.DrawRay(ray.origin, ray.direction, Color.red);
+
+        if (Physics.Raycast(ray, 0.2f, wallLayer))
+        {
+            Debug.Log("Wall detected in front of the player.");
+            return true;
+        }
+        else
+        {
+            return false;
         }
     }
 }

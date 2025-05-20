@@ -11,6 +11,7 @@ public enum eItemType
 
 public enum eConsumableType
 {
+    none,
     Booster,
     DoubleJump,
     Invincibility
@@ -20,7 +21,8 @@ public enum eConsumableType
 public class ItemDateConsumable
 {
     public eConsumableType type;
-    public int value;
+    public float value;
+    public float duration; // 지속시간
 }
 
 [CreateAssetMenu(fileName = "New Item", menuName = "ScriptableObject/Item")]
@@ -34,9 +36,8 @@ public class ItemData : ScriptableObject
     public GameObject dropPrefab;
 
     [Header("Consumable")]
-    public ItemDateConsumable[] consumables;
+    public ItemDateConsumable consumables;
 
     [Header("Equip")]
     public GameObject equipPrefab;
-
 }

@@ -20,7 +20,7 @@ public class ItemSlot : MonoBehaviour
             icon.sprite = itemData.icon;
         }
 
-        //useButton.onClick.AddListener(() => UseItem());
+        useButton.onClick.AddListener(() => UseItem());
         dropButton.onClick.AddListener(() => DropItem());
         //equipButton.onClick.AddListener(() => EquipItem());
 
@@ -33,16 +33,16 @@ public class ItemSlot : MonoBehaviour
         CharacterManager.Instance.inven.selectedItem = itemData;
     }
 
-    //public void UseItem()
-    //{
-    //    if (itemData.itemType == eItemType.consumable)
-    //    {
-    //        Debug.Log("Used: " + itemData.itemName);
-    //        PlayerManager.Instance.Heal(itemData.healAmount); // 예시
-    //        InventoryManager.Instance.RemoveItem(itemData);
-    //        Destroy(gameObject);
-    //    }
-    //}
+    public void UseItem()
+    {
+        if (itemData.itemType == eItemType.consumable)
+        {
+            Debug.Log("Used: " + itemData.name);
+
+            EffectManager.Instance.PlayEffect(itemData.consumables.type, itemData.consumables.value, itemData.consumables.duration); // 효과 적용
+            Destroy(gameObject);
+        }
+    }
 
     public void DropItem()
     {

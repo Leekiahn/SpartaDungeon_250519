@@ -10,6 +10,7 @@ public class GameManager : Singleton<GameManager>
     private void Awake()
     {
         player = GameObject.FindGameObjectWithTag("Player");
+        Application.targetFrameRate = 60; //프레임 레이트 설정
     }
 
     private void Start()

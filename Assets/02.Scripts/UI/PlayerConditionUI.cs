@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class PlayerConditionUI : MonoBehaviour
 {
     [SerializeField] private Image hpCircle;
-    [SerializeField] private TextMeshProUGUI hpText;
+    public TextMeshProUGUI hpText;
 
     [SerializeField] private Image staminaCircle;
     [SerializeField] private TextMeshProUGUI staminaText;
@@ -28,8 +28,16 @@ public class PlayerConditionUI : MonoBehaviour
 
     public void UpdateUI()
     {
-        hpCircle.fillAmount = playerCondition.Hp / playerCondition.maxHp;
-        hpText.text = playerCondition.Hp.ToString("0");
+        if (!CharacterManager.Instance.condition.godMode)
+        {
+            hpCircle.fillAmount = playerCondition.Hp / playerCondition.maxHp;
+            hpText.text = playerCondition.Hp.ToString("0");
+        }
+        else
+        {
+            hpCircle.fillAmount = 1f;
+            hpText.text = "¹«Àû";
+        }
 
         staminaCircle.fillAmount = playerCondition.Stamina / playerCondition.maxStamina;
         staminaText.text = playerCondition.Stamina.ToString("0");

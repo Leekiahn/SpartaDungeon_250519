@@ -8,7 +8,7 @@ public class Item : MonoBehaviour
 
     public string GetInteractPrompt()
     {
-        string str = $"{itemData.displayName}\n{itemData.description}";
+        string str = $"{itemData.displayName}\n{itemData.itemType.ToString()}\n{itemData.description}";
         return str;
     }
 }

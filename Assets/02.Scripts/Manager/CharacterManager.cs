@@ -49,5 +49,4 @@ public class CharacterManager : Singleton<CharacterManager>
             return;
         }
     }
-
 }

@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PlayerCondition : MonoBehaviour
 {
+    public bool godMode = false; // God mode for testing purposes
+
     public float maxHp = 100f;
     [SerializeField] private float hp;
     public float Hp
@@ -12,9 +14,18 @@ public class PlayerCondition : MonoBehaviour
         set
         {
             hp = Mathf.Clamp(value, 0, maxHp);
-            if (hp <= 0)
+            if (!godMode)
             {
-                Debug.Log("Player is dead!");
+                if (hp <= 0)
+                {
+                    value = 0;
+                    Debug.Log("Player is dead!");
+                }
+            }
+            else
+            {
+                value = maxHp; // If in god mode, set HP to max
+                Debug.Log("Player is invincible!");
             }
         }
     }
