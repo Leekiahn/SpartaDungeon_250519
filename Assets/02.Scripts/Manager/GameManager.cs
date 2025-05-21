@@ -7,16 +7,13 @@ public class GameManager : Singleton<GameManager>
     private GameObject player;
     private Vector3 spawnPos;
 
-    private void Awake()
-    {
-        player = GameObject.FindGameObjectWithTag("Player");
-        Application.targetFrameRate = 60; //프레임 레이트 설정
-    }
 
     private void Start()
     {
         //플레이어가 스폰될 위치를 저장
+        player = GameObject.FindGameObjectWithTag("Player"); //플레이어 오브젝트 찾기
         spawnPos = player.transform.position;
+        Application.targetFrameRate = 60; //프레임 레이트 설정
     }
 
 
@@ -27,10 +24,5 @@ public class GameManager : Singleton<GameManager>
         {
             player.transform.position = spawnPos;
         }
-    }
-
-    public void MakeManager()
-    {
-        Debug.Log($"{gameObject.name} is created.");
     }
 }

@@ -23,7 +23,7 @@ public class Singleton<T> : MonoBehaviour where T : Component
         }
     }
 
-    protected void Start()
+    protected void Awake()
     {
         if (instance == null)
         {

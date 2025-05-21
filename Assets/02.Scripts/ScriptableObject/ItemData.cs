@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -17,12 +18,26 @@ public enum eConsumableType
     Invincibility
 }
 
+public enum eEquipableType
+{
+    none,
+    SpeedUp,
+    JumpUp,
+}
+
 [Serializable]
 public class ItemDateConsumable
 {
     public eConsumableType type;
     public float value;
     public float duration; // 지속시간
+}
+
+[Serializable]
+public class ItemDataEquipable
+{
+    public eEquipableType type;
+    public float value; // 효과 수치
 }
 
 [CreateAssetMenu(fileName = "New Item", menuName = "ScriptableObject/Item")]
@@ -40,4 +55,7 @@ public class ItemData : ScriptableObject
 
     [Header("Equip")]
     public GameObject equipPrefab;
+
+    [Header("Equipable")]
+    public ItemDataEquipable equipable;
 }

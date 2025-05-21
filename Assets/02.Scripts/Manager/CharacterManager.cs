@@ -7,12 +7,14 @@ public class CharacterManager : Singleton<CharacterManager>
     public GameObject player;
     public PlayerCtrl playerCtrl;
     public PlayerCondition condition;
+    public EquipHandler equipHandler;
+    public EquipEffectHandler equipEffct;
     public PlayerAnimCtrl anim;
     public PlayerInteract interact;
     public Inventory inven;
 
 
-    private void Awake()
+    private void Start()
     {
         playerCtrl = player.GetComponent<PlayerCtrl>();
         if (playerCtrl == null)
@@ -46,6 +48,20 @@ public class CharacterManager : Singleton<CharacterManager>
         if (inven == null)
         {
             Debug.LogError("Inventory component not found on this GameObject.");
+            return;
+        }
+
+        equipHandler = player.GetComponent<EquipHandler>();
+        if (equipHandler == null)
+        {
+            Debug.LogError("EquipHandler component not found on this GameObject.");
+            return;
+        }
+
+        equipEffct = player.GetComponent<EquipEffectHandler>();
+        if (equipEffct == null)
+        {
+            Debug.LogError("EquipEffectHandler component not found on this GameObject.");
             return;
         }
     }

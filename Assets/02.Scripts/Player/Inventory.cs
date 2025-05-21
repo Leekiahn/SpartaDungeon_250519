@@ -7,8 +7,6 @@ public class Inventory : MonoBehaviour
     public List<ItemData> items;
     public ItemData selectedItem;
 
-    public Transform EquipPos;
-
     void Start()
     {
 

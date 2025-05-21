@@ -9,7 +9,7 @@ public class UIManager : Singleton<UIManager>
     public InventoryUI invenUI;
     public GameObject crosshair;
 
-    private void Awake()
+    private void Start()
     {
         playerConditionUI = GetComponentInChildren<PlayerConditionUI>();
         if (playerConditionUI == null)

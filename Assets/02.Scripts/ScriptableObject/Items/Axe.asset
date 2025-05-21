@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Axe
   m_EditorClassIdentifier: 
   displayName: "\uB3C4\uB07C"
-  description: "\u3141"
+  description: "\uC7A5\uCC29 \uC2DC, \uC18D\uB3C4 \uC99D\uAC00"
   icon: {fileID: 21300000, guid: ecdbdda5541e00f43aaf0de1a6ac4cc9, type: 3}
   itemType: 0
   dropPrefab: {fileID: 3688916871849653590, guid: 5243058f5b383e44c902354b0452251f, type: 3}
@@ -22,3 +22,6 @@ MonoBehaviour:
     value: 0
     duration: 0
   equipPrefab: {fileID: 1067105051557393406, guid: 036cc9c553a2bf642aaa27ab289a11f6, type: 3}
+  equipable:
+    type: 1
+    value: 10
