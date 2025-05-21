@@ -16,7 +16,6 @@ public class PlayerCtrl : MonoBehaviour
     private int maxJumpCount = 1;
     private Vector2 curMoveInput;
     [SerializeField] private LayerMask groundLayer;
-    [SerializeField] private LayerMask wallLayer;
 
     [Header("Look")]
     [SerializeField] private Transform camContainer;
@@ -28,6 +27,8 @@ public class PlayerCtrl : MonoBehaviour
     private float curYRot;
     private bool TPSOn = false;
     [SerializeField] private Vector3 TPSPos;
+
+    [Header("Door")]
 
     private Rigidbody _rigidbody;
     public Camera FPS_cam;

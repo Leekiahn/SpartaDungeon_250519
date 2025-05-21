@@ -9,6 +9,7 @@ public class CharacterManager : Singleton<CharacterManager>
     public PlayerCondition condition;
     public EquipHandler equipHandler;
     public EquipEffectHandler equipEffct;
+    public DoorHandler doorHandler;
     public PlayerAnimCtrl anim;
     public PlayerInteract interact;
     public Inventory inven;
@@ -62,6 +63,13 @@ public class CharacterManager : Singleton<CharacterManager>
         if (equipEffct == null)
         {
             Debug.LogError("EquipEffectHandler component not found on this GameObject.");
+            return;
+        }
+
+        doorHandler = player.GetComponent<DoorHandler>();
+        if (doorHandler == null)
+        {
+            Debug.LogError("DoorHandler component not found on this GameObject.");
             return;
         }
     }

@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class TurretCtrl : MonoBehaviour
 {
-    public float turretDamange = 5f;
     private float detectTime;
+    public float turretDamange = 5f;
     public float damageTimeRate = 2f;
 
     private TurretHead turret;

@@ -6,7 +6,10 @@ public class PlayerInteract : MonoBehaviour
 {
     public GameObject curObject;
     public Item item;
+    public Door door;
     [SerializeField] private LayerMask InteractableLayerMask;
+    [SerializeField] private LayerMask doorLayerMask;
+
     public float maxCheckDistance = 3f;
 
     [SerializeField] private Camera cam;
@@ -25,6 +28,13 @@ public class PlayerInteract : MonoBehaviour
             curObject = hit.collider.gameObject;
             item = curObject.GetComponent<Item>();
             UIManager.Instance.interactPromptUI.itemText.text = item.GetInteractPrompt();
+        }
+        else if(Physics.Raycast(ray, out hit, maxCheckDistance, doorLayerMask))     //¹® °¨Áö
+        {
+            curObject = hit.collider.gameObject;
+            door = curObject.GetComponent<Door>();
+            CharacterManager.Instance.doorHandler.curDoor = door;
+            UIManager.Instance.interactPromptUI.itemText.text = door.GetInteractPrompt();
         }
         else
         {
