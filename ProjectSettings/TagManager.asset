@@ -11,13 +11,13 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Ground
+  - Interactable
+  - Wall
+  - Player
+  - EquipItem
+  - Post-Process
+  - Door
   - 
   - 
   - 

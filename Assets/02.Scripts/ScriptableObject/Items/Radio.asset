@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6c2c9c64191d5c4f80acefd72a23023, type: 3}
+  m_Name: Radio
+  m_EditorClassIdentifier: 
+  displayName: "\uB77C\uB514\uC624"
+  description: "\uC7A5\uCC29 \uC2DC, 1\uBD84 \uB3D9\uC548 \uC810\uD504\uB825 \uC99D\uAC00"
+  icon: {fileID: 21300000, guid: 5817cbbd3e961574db44f01496ade59b, type: 3}
+  itemType: 0
+  dropPrefab: {fileID: 6806299397237480778, guid: 787df2b7e5eb28042bafab6384628374, type: 3}
+  consumables:
+    type: 0
+    value: 100
+    duration: 60
+  equipPrefab: {fileID: 3513289967774039586, guid: 2aa1178ab51f385488a455a923556c1f, type: 3}
+  equipable:
+    type: 2
+    value: 200
