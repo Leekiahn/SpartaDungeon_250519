@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Playables;
 
-public class PlayerCtrl : MonoBehaviour
+public class PlayerCtrl : MonoBehaviour, IMovable, ILookable
 {
     [Header("Movement")]
     public float moveSpeed = 5f;
@@ -62,7 +62,7 @@ public class PlayerCtrl : MonoBehaviour
     }
 
     //이동
-    private void Move()
+    public void Move()
     {
         Vector3 dir = transform.forward * curMoveInput.y + transform.right * curMoveInput.x;
         _rigidbody.MovePosition(_rigidbody.position + dir * moveSpeed * Time.fixedDeltaTime);
@@ -124,7 +124,7 @@ public class PlayerCtrl : MonoBehaviour
     }
 
     //카메라 회전
-    private void Look()
+    public void Look()
     {
         curXRot += curLookInput.y * mouseSensitivity;
         curXRot = Mathf.Clamp(curXRot, minXRot, maxXRot);
