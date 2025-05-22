@@ -10,6 +10,9 @@ Unity 숙련 과정에서 진행한 개인 과제입니다.
 - 이동 및 점프 구현 (`Input System`, `Rigidbody ForceMode`)
   - `W`, `A`, `S`, `D` 키: 캐릭터 이동
   - `Spacebar`: 점프
+  - `E`: 상호작용
+  - `Tab`: 인벤토리
+  - `V`: 시점 변경
 
 ### ❤️ 상태 UI
 - 캐릭터의 상태를 보여주는 UI 구성
